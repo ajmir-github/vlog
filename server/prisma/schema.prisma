@@ -1,0 +1,66 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Playlist {
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  tags   String[]
+  title  String
+  videos Video[]
+  user   User     @relation(fields: [userId], references: [id])
+  userId String   @db.ObjectId
+}
+
+model Video {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  tags        String[]
+  title       String
+  description String
+  video       String
+  published   Boolean   @default(false)
+  views       Int       @default(0)
+  comments    Comment[]
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String    @db.ObjectId
+  Playlist    Playlist? @relation(fields: [playlistId], references: [id])
+  playlistId  String?   @db.ObjectId
+}
+
+enum UserRole {
+  admin
+  user
+}
+
+model User {
+  id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  email    String     @unique
+  name     String
+  password String
+  bio      String
+  profile  String?
+  role     UserRole
+  videos   Video[]
+  comments Comment[]
+  Playlist Playlist[]
+}
+
+enum Rating {
+  Good
+  Bad
+  Ok
+}
+
+model Comment {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  body    String
+  rating  Rating
+  user    User    @relation(fields: [userId], references: [id])
+  userId  String  @db.ObjectId
+  Video   Video?  @relation(fields: [videoId], references: [id])
+  videoId String? @db.ObjectId
+}
