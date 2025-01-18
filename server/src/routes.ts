@@ -1,10 +1,11 @@
 import express from "express";
-import { signIn } from "./controllers/authController";
+import authRouter from "./routes/authRoutes";
 
 const appRouter = express.Router();
 
 // auth routes
-appRouter.post("/auth/sign-in", signIn);
+appRouter.post("/auth", authRouter);
+
 // user routes
 // post routes
 // comment routes

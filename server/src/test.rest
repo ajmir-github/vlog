@@ -12,7 +12,10 @@ Content-Type: application/json
 
 {
     "email":"ajmir@gmail.com",
-    "password":"123456"
+    "password":"123456",
+    "name":"Ajmir Raziqi",
+    "bio":"Exploring the world!"
 }
 ###
-GET http://localhost:4003/data
+GET http://localhost:4003/auth
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.Njc4YjAwYWM0ZjkxYjZkNGM2M2E2NzUz.G30y0KdkwCUPmNQKROcgpEyzR6-cdda15aCVhvhrrR4
