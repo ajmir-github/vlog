@@ -1,4 +1,18 @@
 ### 
-GET http://localhost:4002/s-data
+POST http://localhost:4003/auth/sign-in
+Content-Type: application/json
+
+{
+    "email":"ajmir@gmail.com",
+    "password":"123456"
+}
 ### 
-GET http://localhost:4002/data
+POST http://localhost:4003/auth/sign-up
+Content-Type: application/json
+
+{
+    "email":"ajmir@gmail.com",
+    "password":"123456"
+}
+###
+GET http://localhost:4003/data

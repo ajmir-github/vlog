@@ -1,4 +1,4 @@
-import { Handler, Request } from "express";
+import { Handler, NextFunction, Request, Response } from "express";
 
 type PromiseLike<T> = T | Promise<T>;
 
@@ -20,7 +20,7 @@ export default function createContext<Context extends {}>(
   function resolve<Data>(
     resolve: (context: Context, request: Request) => PromiseLike<Data>
   ): Handler {
-    return async (request, response, next) => {
+    return async function (request, response, next) {
       try {
         const context = await contextFactory(request);
         const data = await resolve(context, request);
@@ -36,3 +36,9 @@ export default function createContext<Context extends {}>(
     resolve,
   };
 }
+
+export type inferContext<T> = T extends {
+  resolve: (handler: (context: infer Context, request: any) => any) => any;
+}
+  ? Context
+  : never;
