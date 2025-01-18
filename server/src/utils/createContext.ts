@@ -6,13 +6,13 @@ export default function createContext<Context extends {}>(
   contextFactory: (request: Request) => PromiseLike<Context>
 ) {
   // keep chain with use
-  function use<NewContext extends {}>(
+  function use<NewContext extends {} | void>(
     middleware: (context: Context, request: Request) => PromiseLike<NewContext>
   ) {
     const handle = async (request: Request) => {
       const context = await contextFactory(request);
       const newContext = await middleware(context, request);
-      return { ...context, ...newContext };
+      return { ...context, ...(newContext || {}) };
     };
     return createContext(handle);
   }

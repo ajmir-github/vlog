@@ -4,13 +4,16 @@ import {
   signIn,
   signUp,
   deactivateUser,
+  updateSelfUser,
 } from "../controllers/authController";
 
 const authRouter = express.Router();
 
 authRouter.post("/sign-in", signIn);
 authRouter.post("/sign-up", signUp);
-authRouter.get("/get-auth", getAuth);
-authRouter.post("/deactivate", deactivateUser);
+// get and update
+authRouter.get("/self", getAuth);
+authRouter.patch("/self/deactivate", deactivateUser);
+authRouter.patch("/self", updateSelfUser);
 
 export default authRouter;

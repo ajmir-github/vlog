@@ -56,7 +56,7 @@ export const signUp = PublicContext.use(
 export const getAuth = PrivateContext.resolve((context) => context.auth);
 // deactivate
 export const deactivateUser = PrivateContext.resolve(async (context) => {
-  await database.user.updateOne({
+  await database.user.update({
     where: { id: context.auth.id },
     data: {
       role: UserRole.deactivated,
@@ -64,3 +64,24 @@ export const deactivateUser = PrivateContext.resolve(async (context) => {
   });
   return "User deactivated!";
 });
+
+export const updateSelfUser = PrivateContext.use(
+  validateBody(
+    z
+      .object({
+        email: z.string().email(),
+        name: z.string().min(3),
+        bio: z.string(),
+        password: z.string().min(6).transform(hashPassword),
+      })
+      .partial()
+  )
+)
+  .use(onlyUniqueEmail)
+  .resolve(async (context) => {
+    const user = await database.user.update({
+      where: { id: context.auth.id },
+      data: context.body,
+    });
+    return { user };
+  });
