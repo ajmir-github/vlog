@@ -2,7 +2,7 @@ import express from "express";
 import { env, PublicDirectory } from "./constants";
 import cors from "cors";
 import { handleErrors, handleNotFoundError } from "./ErrorHandling";
-import appRouter from "./routes";
+import appRouter from "./appRouter";
 
 const app = express();
 app.use(

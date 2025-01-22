@@ -2,6 +2,7 @@ import createContext from "./utils/createContext";
 import { ErrorResponse } from "./ErrorHandling";
 import { verifyToken } from "./utils/encryption";
 import database from "./utils/database";
+import { UserRole } from "@prisma/client";
 
 export const PublicContext = createContext((request) => {
   const token =
@@ -9,8 +10,8 @@ export const PublicContext = createContext((request) => {
     request.headers.authorization.replace("Bearer ", "");
   return {
     token,
-    file: request.file,
-    files: request.files,
+    // file: request.file,
+    // files: request.files,
   };
 });
 
@@ -29,4 +30,10 @@ export const PrivateContext = PublicContext.use(async ({ token }) => {
   return {
     auth: user,
   };
+});
+
+export const AdminContext = PrivateContext.use((context) => {
+  if (context.auth.role !== UserRole.admin)
+    throw ErrorResponse.unauthorized("Only admin can do so!");
+  return {};
 });
