@@ -27,8 +27,13 @@ export const PrivateContext = PublicContext.use(async ({ token }) => {
   const user = await database.user.findUnique({ where: { id: verification } });
   if (!user)
     throw ErrorResponse.unautheticated("This user does not exist anymore!");
+
   return {
     auth: user,
+    isAdmin: user.role === UserRole.admin,
+    isOwner(id: string) {
+      return id === user.id;
+    },
   };
 });
 
